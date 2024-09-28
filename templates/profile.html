@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}'s Profile</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="profile-wrapper">
+        <div class="profile-header-section">
+            <!-- Profile Picture -->
+            <div class="profile-pic-section">
+                <img src="{{ user.profile.profile_pic.url }}" alt="{{ user.username }}'s profile picture" class="profile-img">
+            </div>
+
+            <!-- User Info -->
+            <div class="user-info-section">
+                <h2>{{ user.username }}</h2>
+                <p>{{ user.profile.bio }}</p>
+                
+                <!-- Follow/Unfollow Button -->
+                {% if request.user != user %}
+                    {% if user in request.user.profile.following.all %}
+                        <form action="{% url 'unfollow_user' user.username %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="follow-btn">Unfollow</button>
+                        </form>
+                    {% else %}
+                        <form action="{% url 'follow_user' user.username %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="follow-btn">Follow</button>
+                        </form>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Follower and Following Stats -->
+        <div class="profile-stats-section">
+            <p><strong>{{ user.profile.followers.count }}</strong> Followers</p>
+            <p><strong>{{ user.profile.following.count }}</strong> Following</p>
+        </div>
+
+        <!-- User Posts -->
+        <div class="user-posts-section">
+            <h3>{{ user.username }}'s Posts</h3>
+            <div class="posts-grid-section">
+                {% for post in posts %}
+                    <div class="post-item">
+                        <a href="{% url 'post_detail' post.id %}">
+                            <img src="{{ post.image.url }}" alt="Post image" class="post-img-item">
+                        </a>
+                        <p class="post-caption">{{ post.caption|truncatechars:100 }}</p>
+                    </div>
+                {% empty %}
+                    <p>No posts yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

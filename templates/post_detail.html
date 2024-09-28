@@ -1,0 +1,32 @@
+<!-- post_detail.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post by {{ post.user.username }}</title>
+</head>
+<body>
+    <div class="post-container">
+        <!-- Post Image -->
+        <div class="post-image">
+            <img src="{{ post.image.url }}" alt="Post image">
+        </div>
+
+        <!-- Post Caption -->
+        <div class="post-caption">
+            <p>{{ post.caption }}</p>
+        </div>
+
+        <!-- Comments Section -->
+        <div class="comments">
+            <h4>Comments:</h4>
+            {% for comment in comments %}
+                <p><strong>{{ comment.user.username }}</strong>: {{ comment.text }}</p>
+            {% empty %}
+                <p>No comments yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

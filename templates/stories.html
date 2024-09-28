@@ -1,0 +1,9 @@
+<!-- stories.html -->
+<div class="stories">
+    {% for story in stories %}
+        <div class="story">
+            <img src="{{ story.image.url }}" alt="{{ story.user.username }}'s story">
+            <p>{{ story.user.username }}</p>
+        </div>
+    {% endfor %}
+</div>

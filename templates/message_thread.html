@@ -1,0 +1,14 @@
+<!-- message_thread.html -->
+<div class="messages">
+    {% for message in messages %}
+        <div class="{{ message.sender == request.user|yesno:'sent,received' }}">
+            <p>{{ message.content }}</p>
+            <small>{{ message.timestamp }}</small>
+        </div>
+    {% endfor %}
+</div>
+<form method="POST">
+    {% csrf_token %}
+    <textarea name="content" placeholder="Type your message"></textarea>
+    <button type="submit">Send</button>
+</form>

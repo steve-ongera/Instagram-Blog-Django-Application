@@ -1,0 +1,95 @@
+{% load static %}
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Instagram Clone</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <div class="feed-container">
+        <header>
+            <h1>Instagram Clone</h1>
+        </header>
+
+        <div class="posts-feed">
+            {% for post in posts %}
+                <div class="post">
+                    <!-- Post Author -->
+                    <div class="post-header">
+                        <div class="author-info">
+                            <img src="{{ post.author.profile.profile_pic.url }}" alt="Profile Picture" class="profile-pic">
+                            <p class="author-name"><a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a></p>
+                        </div>
+                    </div>
+
+                    <!-- Post Image -->
+                    <div class="post-image">
+                        <img src="{{ post.image.url }}" alt="Post Image" class="post-img">
+                    </div>
+
+                    <!-- Post Caption -->
+                    <div class="post-caption">
+                        <p><strong>{{ post.author.username }}</strong> {{ post.caption }}</p>
+                    </div>
+
+                    <!-- Post Likes -->
+                    <div class="post-likes">
+                        <button id="like-btn-{{ post.id }}" class="like-btn {% if user in post.likes.all %}liked{% endif %}" onclick="toggleLike({{ post.id }})">
+                            {% if user in post.likes.all %}
+                                ❤️ 
+                            {% else %}
+                                💔 
+                            {% endif %}
+                        </button>
+                        <p id="like-count-{{ post.id }}">{{ post.likes.count }} likes</p>
+                    </div>
+
+                    <!-- Comments Section -->
+                    <div class="post-comments">
+                        <a href="{% url 'post_detail' post.id %}">View comments</a>
+                    </div>
+
+                    <!-- Post Timestamp -->
+                    <div class="post-timestamp">
+                        <p>{{ post.created_at|date:"F j, Y, g:i a" }}</p>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No posts yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        function toggleLike(postId) {
+            const likeBtn = document.getElementById(`like-btn-${postId}`);
+            const likeCount = document.getElementById(`like-count-${postId}`);
+    
+            fetch(`/post/${postId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}', // Include CSRF token for security
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.liked) {
+                    likeBtn.innerHTML = '❤️ ';
+                    likeBtn.classList.add('liked');
+                } else {
+                    likeBtn.innerHTML = '💔 ';
+                    likeBtn.classList.remove('liked');
+                }
+                likeCount.innerHTML = `${data.like_count} likes`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+    
+</body>
+</html>

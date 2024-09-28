@@ -1,0 +1,224 @@
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+    margin: 0;
+    padding: 0;
+}
+
+.feed-container {
+    width: 40%;
+    margin: 0 auto;
+    padding-top: 20px;
+}
+
+header h1 {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.posts-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Post Styles */
+.post {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+}
+
+.profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.author-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* Post Image */
+.post-image {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center; /* Center the image horizontally */
+}
+
+.post-img {
+    width: 60%;
+    max-width: 600px;  /* Set a maximum width to control image size */
+    height: auto;  /* Maintain aspect ratio */
+    max-height: 450px;  /* Set a maximum height to prevent the image from getting too large */
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+
+/* Post Caption */
+.post-caption {
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+/* Likes, Comments, and Timestamp */
+.post-likes, .post-comments, .post-timestamp {
+    font-size: 13px;
+    color: #888;
+}
+
+.post-likes {
+    margin-bottom: 5px;
+}
+
+.post-comments a {
+    color: #00376b;
+    text-decoration: none;
+}
+
+.post-comments a:hover {
+    text-decoration: underline;
+}
+
+.post-timestamp {
+    font-size: 12px;
+    margin-top: 5px;
+}
+
+.like-btn {
+    background-color: transparent;
+    border: 1px solid black;
+    border-radius: 5px;
+    color: black;
+    padding: 5px 10px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.like-btn:hover {
+    background-color: #f2f2f2;
+}
+
+.like-btn.liked {
+    border: none;
+    color: red;
+}
+
+.like-btn.liked:hover {
+    background-color: #ffe6e6;
+}
+
+/* Profile Page Styles */
+.profile-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.profile-header-section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.profile-pic-section {
+    flex: 1;
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.user-info-section {
+    flex: 2;
+    padding-left: 20px;
+}
+
+.user-info-section h2 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.user-info-section p {
+    margin: 10px 0;
+    color: #555;
+}
+
+.follow-btn {
+    background-color: #3897f0;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.follow-btn:hover {
+    background-color: #3074d0;
+}
+
+.profile-stats-section {
+    display: flex;
+    justify-content: space-between;
+    max-width: 300px;
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+.profile-stats-section p {
+    font-size: 16px;
+}
+
+.user-posts-section {
+    margin-top: 40px;
+}
+
+.posts-grid-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.post-item {
+    position: relative;
+}
+
+.post-img-item {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.post-caption {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+}
+
+

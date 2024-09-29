@@ -41,3 +41,11 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['bio', 'email', 'phone', 'about', 'profile_pic']  # Fields to be updated
+
+class StoryForm(forms.ModelForm):
+    class Meta:
+        model = Story
+        fields = ['image']  # You can add more fields if necessary
+        widgets = {
+            'image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
+        }

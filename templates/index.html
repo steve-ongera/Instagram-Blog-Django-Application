@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Instagram Clone</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/stories.css' %}">
 </head>
 <body>
     <div class="feed-container">
@@ -14,52 +15,106 @@
             <h1>Instagram Clone</h1>
         </header>
 
-        <div class="posts-feed">
-            {% for post in posts %}
-                <div class="post">
-                    <!-- Post Author -->
-                    <div class="post-header">
-                        <div class="author-info">
-                            <img src="{{ post.author.profile.profile_pic.url }}" alt="Profile Picture" class="profile-pic">
-                            <p class="author-name"><a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a></p>
+        <div class="container">
+            <!-- Left Sidebar for Navigation Links -->
+            <div class="sidebar">
+                <h2>Instagram</h2>
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Profile</a></li>
+                    <li><a href="#">Messages</a></li>
+                    <li><a href="#">Notifications</a></li>
+                    <li><a href="#">Explore</a></li>
+                </ul>
+            </div>
+
+            
+
+            <!-- Main Content for Posts -->
+            <div class="main-content">
+
+                 <!-- Stories Section -->
+                 
+                    <div class="stories-container">
+                        {% for story in stories %}
+                            <div class="story">
+                                <a href="{% url 'view_story' story.id %}">
+                                    <div class="story-img-wrapper">
+                                        <img src="{{ story.image.url }}" alt="{{ story.user.username }}'s story" class="story-img">
+                                    </div>
+                                </a>
+                                <p class="story-username">{{ story.user.username }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    
+                    
+                    <!-- endof stories -->
+                    
+
+                    <br>
+                <div class="posts-feed">
+                    {% for post in posts %}
+                        <div class="post">
+                            <!-- Post Author -->
+                            <div class="post-header">
+                                <div class="author-info">
+                                    <img src="{{ post.author.profile.profile_pic.url }}" alt="Profile Picture" class="profile-pic">
+                                    <p class="author-name"><a href="{% url 'profile' post.author.username %}">{{ post.author.username }}</a></p>
+                                </div>
+                            </div>
+
+                            <!-- Post Image -->
+                            <div class="post-image">
+                                <img src="{{ post.image.url }}" alt="Post Image" class="post-img">
+                            </div>
+
+                            <!-- Post Caption -->
+                            <div class="post-caption">
+                                <p><strong>{{ post.author.username }}</strong> {{ post.caption }}</p>
+                            </div>
+
+                            <!-- Post Likes -->
+                            <div class="post-likes">
+                                <button id="like-btn-{{ post.id }}" class="like-btn {% if user in post.likes.all %}liked{% endif %}" onclick="toggleLike({{ post.id }})">
+                                    {% if user in post.likes.all %}
+                                        ❤️ 
+                                    {% else %}
+                                        💔 
+                                    {% endif %}
+                                </button>
+                                <p id="like-count-{{ post.id }}">{{ post.likes.count }} likes</p>
+                            </div>
+
+                            <!-- Comments Section -->
+                            <div class="post-comments">
+                                <a href="{% url 'post_detail' post.id %}">View comments</a>
+                            </div>
+
+                            <!-- Post Timestamp -->
+                            <div class="post-timestamp">
+                                <p>{{ post.created_at|date:"F j, Y, g:i a" }}</p>
+                            </div>
                         </div>
-                    </div>
-
-                    <!-- Post Image -->
-                    <div class="post-image">
-                        <img src="{{ post.image.url }}" alt="Post Image" class="post-img">
-                    </div>
-
-                    <!-- Post Caption -->
-                    <div class="post-caption">
-                        <p><strong>{{ post.author.username }}</strong> {{ post.caption }}</p>
-                    </div>
-
-                    <!-- Post Likes -->
-                    <div class="post-likes">
-                        <button id="like-btn-{{ post.id }}" class="like-btn {% if user in post.likes.all %}liked{% endif %}" onclick="toggleLike({{ post.id }})">
-                            {% if user in post.likes.all %}
-                                ❤️ 
-                            {% else %}
-                                💔 
-                            {% endif %}
-                        </button>
-                        <p id="like-count-{{ post.id }}">{{ post.likes.count }} likes</p>
-                    </div>
-
-                    <!-- Comments Section -->
-                    <div class="post-comments">
-                        <a href="{% url 'post_detail' post.id %}">View comments</a>
-                    </div>
-
-                    <!-- Post Timestamp -->
-                    <div class="post-timestamp">
-                        <p>{{ post.created_at|date:"F j, Y, g:i a" }}</p>
-                    </div>
+                    {% empty %}
+                        <p>No posts yet.</p>
+                    {% endfor %}
                 </div>
-            {% empty %}
-                <p>No posts yet.</p>
-            {% endfor %}
+            </div>
+
+            <!-- Right Sidebar for Suggested Reels -->
+             {% comment %}
+            <div class="suggested-reels">
+                <h2>Suggested Reels</h2>
+                <ul>
+                    <li>Reel 1</li>
+                    <li>Reel 2</li>
+                    <li>Reel 3</li>
+                    <li>Reel 4</li>
+                </ul>
+            </div>
+            {% endcomment %}
         </div>
     </div>
 

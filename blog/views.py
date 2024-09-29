@@ -10,6 +10,9 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import *
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
 
 def register_view(request):
     if request.method == 'POST':
@@ -66,14 +69,53 @@ def logout_view(request):
     logout(request)  # Log the user out
     return redirect('login')  # Redirect to login page
 
-# View for displaying all posts (index page)
+# View for displaying all posts and stories on the index page
 def index(request):
-    posts = Post.objects.all().order_by('-created_at')  # Get all posts, ordered by the latest
+    # Get all posts, ordered by latest
+    posts = Post.objects.all().order_by('-created_at')
+    
+    # Get stories created within the last 24 hours
+    stories = Story.objects.filter(created_at__gte=timezone.now() - timedelta(hours=24))
+
+    # Pass both posts and stories to the context
     context = {
         'posts': posts,
+        'stories': stories,
     }
     return render(request, 'index.html', context)
 
+
+@login_required
+def add_story(request):
+    if request.method == 'POST':
+        form = StoryForm(request.POST, request.FILES)  # Handle file uploads
+        if form.is_valid():
+            story = form.save(commit=False)  # Create story instance but don't save to DB yet
+            story.user = request.user  # Associate the story with the logged-in user
+            story.created_at = timezone.now()  # Set the created timestamp
+            story.save()  # Save the story to the database
+            return redirect('index')  # Redirect to the index or another relevant page
+    else:
+        form = StoryForm()  # Initialize an empty form
+
+    return render(request, 'add_story.html', {'form': form})
+
+
+@login_required
+def view_story(request, story_id):
+    # Fetch the specific story by its ID
+    story = get_object_or_404(Story, id=story_id)
+    
+    # Get the next and previous stories for navigation
+    next_story = Story.objects.filter(id__gt=story.id).order_by('id').first()
+    prev_story = Story.objects.filter(id__lt=story.id).order_by('-id').first()
+
+    context = {
+        'story': story,
+        'next_story': next_story,
+        'prev_story': prev_story
+    }
+    return render(request, 'view_story.html', context)
 
 @login_required
 def upload_post(request):

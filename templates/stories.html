@@ -1,9 +1,22 @@
-<!-- stories.html -->
-<div class="stories">
-    {% for story in stories %}
-        <div class="story">
-            <img src="{{ story.image.url }}" alt="{{ story.user.username }}'s story">
-            <p>{{ story.user.username }}</p>
-        </div>
-    {% endfor %}
-</div>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stories</title>
+    <link rel="stylesheet" href="{% static 'css/stories.css' %}">
+</head>
+<body>
+    <div class="stories-container">
+        {% for story in stories %}
+            <div class="story">
+                <div class="story-img-wrapper">
+                    <img src="{{ story.image.url }}" alt="{{ story.user.username }}'s story" class="story-img">
+                </div>
+                <p class="story-username">{{ story.user.username }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

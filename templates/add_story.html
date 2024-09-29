@@ -1,0 +1,17 @@
+<!-- add_story.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Story</title>
+</head>
+<body>
+    <h1>Upload a New Story</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Upload Story</button>
+    </form>
+    <a href="{% url 'index' %}">Back to Home</a>
+</body>
+</html>

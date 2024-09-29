@@ -7,7 +7,7 @@ body {
 }
 
 .feed-container {
-    width: 40%;
+    width: 80%;
     margin: 0 auto;
     padding-top: 20px;
 }
@@ -222,3 +222,65 @@ header h1 {
 }
 
 
+/* Three Column Layout */
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 250px; /* Fixed width for the sidebar */
+    height: 100vh; /* Full viewport height */
+    background-color: #ffffff; /* White background */
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    position: fixed; /* Fixed position on the left */
+    top: 0;
+    left: 0;
+    overflow-y: auto; /* Scroll if the content is too long */
+}
+
+.sidebar h2 {
+    font-size: 24px; /* Font size for the title */
+    padding: 20px; /* Padding around the title */
+    color: #333; /* Dark gray color for the title */
+    border-bottom: 1px solid #e6e6e6; /* Light border below the title */
+}
+
+.sidebar ul {
+    list-style-type: none; /* Remove bullet points */
+}
+
+.sidebar ul li {
+    margin: 15px 0; /* Space between links */
+}
+
+.sidebar ul li a {
+    text-decoration: none; /* Remove underline from links */
+    color: #333; /* Dark text color */
+    font-size: 18px; /* Font size for links */
+    padding: 15px 20px; /* Padding for clickable area */
+    display: block; /* Make the link a block element */
+    border-radius: 5px; /* Slightly rounded corners */
+    transition: background-color 0.3s; /* Transition for hover effect */
+}
+
+.sidebar ul li a:hover {
+    background-color: #f0f0f0; /* Light gray background on hover */
+    color: #000; /* Change text color on hover */
+}
+
+.main-content {
+    margin-left: 90px;
+    width: 60%; /* Adjust the width as necessary */
+    padding: 10px;
+}
+
+.suggested-reels {
+    width: 20%; /* Adjust the width as necessary */
+    padding: 10px;
+    background-color: #fff; /* Optional: background color for suggested reels */
+    border-radius: 10px; /* Optional: rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
+}

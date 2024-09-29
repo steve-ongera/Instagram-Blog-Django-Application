@@ -15,6 +15,8 @@ urlpatterns = [
 
     # Stories
     path('stories/', views.stories, name='stories'),
+    path('story/<int:story_id>/', views.view_story, name='view_story'),
+    path('add_story/', views.add_story, name='add_story'),
     
     # Posts
     path('post/<int:id>/', views.post_detail, name='post_detail'),

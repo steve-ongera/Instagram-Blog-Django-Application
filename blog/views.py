@@ -13,6 +13,9 @@ from .forms import *
 from django.db.models import Q
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Q
+from django.utils import timezone
+import datetime
 
 def register_view(request):
     if request.method == 'POST':
@@ -148,7 +151,8 @@ def send_message(request, username):
     receiver = get_object_or_404(User, username=username)
     if request.method == 'POST':
         content = request.POST.get('content')
-        message = Message.objects.create(sender=request.user, receiver=receiver, content=content)
+        if content:  # Ensure the content is not empty
+            Message.objects.create(sender=request.user, receiver=receiver, content=content)
         return redirect('message_thread', username=username)
 
     return render(request, 'send_message.html', {'receiver': receiver})
@@ -260,3 +264,99 @@ def unfollow_user(request, username):
         request.user.profile.following.remove(user_to_unfollow)
         user_to_unfollow.profile.followers.remove(request.user)  # Remove the follower
     return redirect('profile', username=username)
+
+
+
+@login_required
+def send_message(request, username):
+    receiver = get_object_or_404(User, username=username)
+
+    # Update the last seen time in the session
+    request.session['last_seen'] = timezone.now().isoformat()  # Store as ISO format string
+    
+    if request.method == 'POST':
+        form = MessageForm(request.POST, request.FILES)  # Handle file uploads
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.receiver = receiver
+            message.save()
+            return redirect('message_thread', username=username)
+    else:
+        form = MessageForm()
+
+    # Retrieve messages between the sender and receiver
+    messages = Message.objects.filter(
+        sender=request.user, receiver=receiver
+    ) | Message.objects.filter(
+        sender=receiver, receiver=request.user
+    )
+    messages = messages.order_by('timestamp')
+
+    # Last seen
+    last_seen_str = request.session.get('last_seen')  # Retrieve the string
+    last_seen = datetime.datetime.fromisoformat(last_seen_str) if last_seen_str else None  # Convert back to datetime
+    
+    return render(request, 'message_thread.html', {
+        'receiver': receiver,
+        'messages': messages,
+        'last_seen': last_seen,  # Pass the datetime object
+        'form': form,  # Pass the form to the template
+    })
+
+
+@login_required
+def message_list(request):
+    sent_messages = Message.objects.filter(sender=request.user).values_list('receiver', flat=True)
+    received_messages = Message.objects.filter(receiver=request.user).values_list('sender', flat=True)
+    
+    # Combine both sender and receiver lists and eliminate duplicates
+    user_ids = set(list(sent_messages) + list(received_messages))
+    users = User.objects.filter(id__in=user_ids)
+    
+    return render(request, 'message_list.html', {
+        'users': users
+    })
+
+
+@login_required
+def create_chat(request, username):
+    receiver = get_object_or_404(User, username=username)
+
+    # Check if a message already exists between the logged-in user and the receiver
+    existing_message = Message.objects.filter(
+        (Q(sender=request.user) & Q(receiver=receiver)) | 
+        (Q(sender=receiver) & Q(receiver=request.user))
+    ).first()
+
+    
+    return redirect('message_thread', username=username)
+
+
+def following_list(request, username):
+    # Get the profile of the user whose following list we want to see
+    profile = get_object_or_404(Profile, user__username=username)
+    
+    # Get the list of users this profile is following
+    following = profile.following.all()
+
+    context = {
+        'profile': profile,
+        'following': following,
+    }
+
+    return render(request, 'following_list.html', context)
+
+
+def followers_list(request, username):
+    # Get the user whose followers are being listed
+    user = get_object_or_404(User, username=username)
+    
+    # Get the list of followers from the user's profile
+    followers = user.profile.followers.all()
+    
+    # Pass the followers to the template
+    return render(request, 'followers_list.html', {
+        'profile_user': user,
+        'followers': followers,
+    })

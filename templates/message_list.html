@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversations</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #444;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .conversation-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #e6e6e6;
+            transition: background-color 0.3s ease;
+        }
+
+        .conversation-item:hover {
+            background-color: #f1f1f1;
+        }
+
+        .conversation-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-info a {
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 5px;
+        }
+
+        .user-info a:hover {
+            color: #0056b3;
+        }
+
+        .last-message {
+            font-size: 14px;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Conversations</h2>
+    <ul>
+        {% for user in users %}
+        <li class="conversation-item">
+            <img src="{{ user.profile.profile_pic.url }}" alt="{{ user.username }}'s Profile Picture">
+            <div class="user-info">
+                <a href="{% url 'message_thread' user.username %}">{{ user.username }}</a>
+                <span class="last-message">
+                    {% with last_message=last_messages  %}
+                        {% if last_message %}
+                            {{ last_message.content|truncatewords:5 }}
+                        {% else %}
+                            No messages yet
+                        {% endif %}
+                    {% endwith %}
+                </span>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    
+</div>
+
+</body>
+</html>

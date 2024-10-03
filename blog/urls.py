@@ -8,10 +8,16 @@ urlpatterns = [
     # Follow/Unfollow
     path('profile/<str:username>/follow/', views.follow_user, name='follow_user'),
     path('profile/<str:username>/unfollow/', views.unfollow_user, name='unfollow_user'),
+    path('profile/<str:username>/following/', views.following_list, name='following-list'),
+    path('followers/<str:username>/', views.followers_list, name='followers_list'),
     
     # Messaging
-    path('messages/<str:username>/', views.message_thread, name='message_thread'),
-    path('messages/<str:username>/send/', views.send_message, name='send_message'),
+    #path('messages/<str:username>/', views.message_thread, name='message_thread'),
+    #path('messages/<str:username>/send/', views.send_message, name='send_message'),
+
+    path('messages/<str:username>/', views.send_message, name='message_thread'),
+    path('messages/', views.message_list, name='message_list'),
+    path('messages/create/<str:username>/', views.create_chat, name='create_chat'),
 
     # Stories
     path('stories/', views.stories, name='stories'),

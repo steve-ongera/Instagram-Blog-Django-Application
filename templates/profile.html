@@ -52,6 +52,15 @@
             text-decoration: none; /* Removes underline from the link */
             color: inherit; /* Inherits the text color */
         }
+
+        .no-underline {
+            text-decoration: none;
+            color: inherit; /* Optional: keeps the color the same as surrounding text */
+        }
+        
+        .no-underline:hover {
+            color: #007bff; /* Optional: Adds a hover effect */
+        }
         
         
 
@@ -91,13 +100,13 @@
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-secondary btn-sm ">Unfollow</button>
                             </form>
-                            <a href="{% url 'test' %}" class="btn btn-outline-primary btn-sm ">Message</a>
+                            <a href="{% url 'create_chat' user.username %}" class="btn btn-outline-primary btn-sm ">Message</a>
                         {% else %}
                             <form action="{% url 'follow_user' user.username %}" method="POST" class="d-inline-block">
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-outline-success btn-sm ">Follow</button>
                             </form>
-                            <a href="#" class="btn btn-outline-primary btn-sm ">Message</a>
+                            <a  href="{% url 'create_chat' user.username %}" class="btn btn-outline-primary btn-sm">Message</a>
                         {% endif %}
                     {% endif %}
                 </div>
@@ -109,10 +118,20 @@
         <div class="row mt-4 justify-content-center">
             <div class="d-flex flex-row justify-content-between w-100">
                 <div class="col text-center">
-                    <p><strong>{{ user.profile.followers.count }}</strong> Followers</p>
+                    <p><strong>
+                        <a href="{% url 'followers_list' user.username %}" class="no-underline">
+                        {{ user.profile.followers.count }}
+                        </a>
+                      </strong>
+                     Followers</p>
                 </div>
                 <div class="col text-center">
-                    <p><strong>{{ user.profile.following.count }}</strong> Following</p>
+                    <p><strong>
+                        <a href="{% url 'following-list' user.username %}" class="no-underline">
+                            {{ user.profile.following.count }} 
+                        </a>
+                    </strong> 
+                    </strong>  Following</p>
                 </div>
                 <div class="col text-center">
                     <p><strong>{{ post_count }}</strong> Posts</p>

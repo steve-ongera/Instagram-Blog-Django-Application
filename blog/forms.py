@@ -49,3 +49,12 @@ class StoryForm(forms.ModelForm):
         widgets = {
             'image': forms.ClearableFileInput(attrs={'accept': 'image/*'}),
         }
+
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['content', 'photo', 'pdf']  # Include only content, photo, and pdf
+        widgets = {
+            'content': forms.Textarea(attrs={'placeholder': 'Type your message'}),
+        }

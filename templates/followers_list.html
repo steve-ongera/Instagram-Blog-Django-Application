@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile_user.username }}'s Followers</title>
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: #fafafa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            font-weight: 400;
+            color: #333;
+            padding-bottom: 20px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto;
+            max-width: 600px;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        li:hover {
+            background-color: #f9f9f9;
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            transition: transform 0.3s;
+        }
+
+        .profile-pic:hover {
+            transform: scale(1.05);
+        }
+
+        .username {
+            font-weight: bold;
+            color: #262626;
+            font-size: 16px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .username:hover {
+            color: #0095f6;
+        }
+
+        .followers-count {
+            font-size: 14px;
+            color: #8e8e8e;
+            text-align: right;
+        }
+
+        .followers-count span {
+            font-weight: 500;
+            color: #262626;
+        }
+
+        a {
+            text-decoration: none; /* Remove underline from links */
+        }
+
+        @media (max-width: 600px) {
+            li {
+                padding: 10px;
+            }
+
+            .profile-pic {
+                width: 40px;
+                height: 40px;
+            }
+
+            .username {
+                font-size: 14px;
+            }
+
+            .followers-count {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>{{ profile_user.username }}'s Followers</h1>
+    <ul>
+        {% for user in followers %}
+            <li>
+                <div class="profile-info">
+                    <a href="{% url 'profile' user.username %}">
+                        <img src="{{ user.profile.profile_pic.url }}" alt="{{ user.username }}'s Profile Picture" class="profile-pic">
+                    </a>
+                    <a href="{% url 'profile' user.username %}" class="username">{{ user.username }}</a>
+                </div>
+                <div class="followers-count">
+                    <span>{{ user.profile.followers.count }}</span> Followers
+                </div>
+            </li>
+        {% empty %}
+            <li>No followers yet.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

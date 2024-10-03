@@ -20,15 +20,16 @@ urlpatterns = [
     
     # Posts
     path('post/<int:id>/', views.post_detail, name='post_detail'),
-    path('post/new/', views.create_post, name='create_post'),
     path('post/<int:id>/like/', views.toggle_like, name='toggle_like'),
+    path('post', views.upload_post , name='upload_post') ,
     
     # Home Page (Feed)
-    path('', views.index, name='index'),
+    #path('', views.index, name='index'),
 
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_view, name='logout'),
     path('create_profile/<int:user_id>/', views.create_profile, name='create_profile'),
     path('update_profile/', views.update_profile_view, name='update_profile'),
+    path('', views.test , name="test"),
 ]

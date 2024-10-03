@@ -1,0 +1,11 @@
+
+<div class="container">
+    <h2>Upload Post</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}  <!-- Renders the form fields as paragraphs -->
+        <button type="submit" class="btn btn-primary">Upload Post</button>
+    </form>
+    <a href="{% url 'test' %}" class="btn btn-secondary">Cancel</a>
+</div>
+

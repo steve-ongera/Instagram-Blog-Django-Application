@@ -1,0 +1,178 @@
+/* General Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.profile-wrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Profile Header */
+.profile-header-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.profile-pic-section {
+  position: relative;
+}
+
+.profile-img {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+}
+
+.username {
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.verification-badge {
+  width: 20px;
+  position: absolute;
+  top: 80px;
+  right: -10px;
+}
+
+/* Bio & Website */
+.profile-info-section {
+  margin: 10px 0;
+}
+
+.bio {
+  font-size: 14px;
+}
+
+.website-link {
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+/* Buttons */
+.profile-actions .btn {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.logout-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+.follow-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Follower/Following Stats */
+.profile-stats-section {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+}
+
+.profile-stats-section p {
+  margin: 0;
+  font-size: 16px;
+}
+
+/* Contact Info */
+.contact-info-section {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 15px;
+}
+
+.contact-item {
+  font-size: 14px;
+  text-decoration: none;
+  color: #333;
+}
+
+.email, .phone, .address {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* User Posts */
+.user-posts-section {
+  margin-top: 20px;
+}
+
+.posts-grid-section {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.post-item {
+  position: relative;
+}
+
+.post-img-item {
+  width: 100%;
+  border-radius: 10px;
+}
+
+.post-caption {
+  font-size: 12px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+
+/* Profile Image */
+.profile-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.verification-badge {
+  width: 30px;
+  height: 30px;
+}
+
+/* Center Profile Section */
+.mt-5 {
+  margin-top: 3rem;
+}
+
+.text-muted {
+  color: #6c757d !important;
+}
+
+/* Bootstrap Button Customization */
+.btn-outline-primary, .btn-outline-danger, .btn-outline-secondary, .btn-outline-success {
+  padding: 8px 20px;
+  border-radius: 30px;
+  margin-right: 10px;
+}
+
+/* Adjust verification badge when placed next to username */
+.verification-badge {
+  width: 20px;
+  height: 20px;
+  margin-left: 2px;
+  vertical-align: middle; /* Align it properly with the text */
+}
+

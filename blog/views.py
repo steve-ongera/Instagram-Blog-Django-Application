@@ -45,7 +45,7 @@ def create_profile(request, user_id):
             form.save()
             messages.success(request, 'Profile updated successfully!')
             login(request, user)  # Automatically log the user in after registration
-            return redirect('index')  # Redirect to the home page
+            return redirect('test')  # Redirect to the home page
             #return redirect('profile', username=user.username)  # Redirect using 'username'
     else:
         form = ProfileForm(instance=profile)
@@ -58,7 +58,7 @@ def login_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)  # Log the user in
-            return redirect('index')  # Redirect to the home page
+            return redirect('test')  # Redirect to the home page
     else:
         form = CustomLoginForm()
 
@@ -94,7 +94,7 @@ def add_story(request):
             story.user = request.user  # Associate the story with the logged-in user
             story.created_at = timezone.now()  # Set the created timestamp
             story.save()  # Save the story to the database
-            return redirect('index')  # Redirect to the index or another relevant page
+            return redirect('test')  # Redirect to the index or another relevant page
     else:
         form = StoryForm()  # Initialize an empty form
 
@@ -125,7 +125,7 @@ def upload_post(request):
             post = form.save(commit=False)
             post.author = request.user
             post.save()
-            return redirect('home')
+            return redirect('test')
     else:
         form = PostForm()
     return render(request, 'upload_post.html', {'form': form})
@@ -141,21 +141,6 @@ def post_detail(request, id):
     return render(request, 'post_detail.html', context)
 
 
-def create_post(request):
-    if request.method == 'POST':
-        form = PostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.user = request.user  # Assign the current user as the post author
-            post.save()
-            return redirect('profile', username=request.user.username)  # Redirect to the profile after successful post creation
-    else:
-        form = PostForm()
-    
-    context = {
-        'form': form,
-    }
-    return render(request, 'create_post.html', context)
 
 
 @login_required
@@ -184,24 +169,18 @@ def stories(request):
     return render(request, 'stories.html', {'stories': stories})
 
 
-@login_required
-def follow_user(request, username):
-    user_to_follow = get_object_or_404(User, username=username)
-    request.user.profile.followers.add(user_to_follow)
-    return redirect('profile', username=username)
-
-@login_required
-def unfollow_user(request, username):
-    user_to_unfollow = get_object_or_404(User, username=username)
-    request.user.profile.followers.remove(user_to_unfollow)
-    return redirect('profile', username=username)
-
 
 @login_required
 def profile_view(request, username):
     user = get_object_or_404(User, username=username)
     posts = user.post_set.all()  # Assuming each post has a foreign key to the user
-    return render(request, 'profile.html', {'user': user, 'posts': posts})
+    post_count = posts.count()  # Count the number of posts
+    context = {
+        'user': user,
+        'posts': posts,
+        'post_count': post_count,  # Add post count to the context
+    }
+    return render(request, 'profile.html', context)
 
 
 @login_required
@@ -236,6 +215,48 @@ def toggle_like(request, id):
             'liked': liked,
             'like_count': post.likes.count()
         })
+    
+@login_required
+def test(request):
+     # Get all posts, ordered by latest
+    posts = Post.objects.all().order_by('-created_at')
+    
+    # Get stories created within the last 24 hours
+    stories = Story.objects.filter(created_at__gte=timezone.now() - timedelta(hours=24))
 
+     # Get the logged-in user's information
+    logged_in_user = request.user
 
+    # Simulate "Suggestions for You" (e.g., users not followed by the logged-in user)
+    suggestions = User.objects.exclude(id=logged_in_user.id)[:9]  # Exclude the logged-in user and limit to 5 suggestions
+    
+    # Get profiles of the suggested users
+    suggested_profiles = Profile.objects.filter(user__in=suggestions)
 
+    # Pass both posts and stories to the context
+    context = {
+        'posts': posts,
+        'stories': stories,
+        'logged_in_user': logged_in_user,
+        'suggestions': suggested_profiles,
+    }
+    return render(request , 'indexx.html' , context)
+
+# Example view to follow a user
+# View to follow a user
+@login_required
+def follow_user(request, username):
+    user_to_follow = get_object_or_404(User, username=username)
+    if user_to_follow != request.user:
+        request.user.profile.following.add(user_to_follow)
+        user_to_follow.profile.followers.add(request.user)  # Add the follower
+    return redirect('profile', username=username)
+
+# View to unfollow a user
+@login_required
+def unfollow_user(request, username):
+    user_to_unfollow = get_object_or_404(User, username=username)
+    if user_to_unfollow != request.user:
+        request.user.profile.following.remove(user_to_unfollow)
+        user_to_unfollow.profile.followers.remove(request.user)  # Remove the follower
+    return redirect('profile', username=username)

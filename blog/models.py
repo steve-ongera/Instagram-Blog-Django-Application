@@ -10,8 +10,8 @@ class Profile(models.Model):
     phone=models.CharField(max_length=50 , blank=True)
     about=models.CharField(max_length=150)
     profile_pic = models.ImageField(upload_to='profile_pics/', default='default.png')
-    followers = models.ManyToManyField(User, related_name='followers', blank=True)
-    following = models.ManyToManyField(User, related_name='following', blank=True)
+    followers = models.ManyToManyField(User, related_name='following_profiles', blank=True)
+    following = models.ManyToManyField(User, related_name='followers_profiles', blank=True)
     
     def __str__(self):
         return f'{self.user.username} Profile'

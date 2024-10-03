@@ -284,3 +284,12 @@ header h1 {
     border-radius: 10px; /* Optional: rounded corners */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: shadow effect */
 }
+
+.verification-badge {
+    width: 18px; /* Adjust as needed */
+    height: 18px;
+    margin-top: 2px;
+    margin-left: 2px;
+    /* Additional styles can go here */
+
+}

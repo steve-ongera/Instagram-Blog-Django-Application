@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="keywords" content="">
+	<meta name="author" content="">
+	<meta name="robots" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="Fillow : Fillow Saas Admin  Bootstrap 5 Template">
+	<meta property="og:title" content="Fillow : Fillow Saas Admin  Bootstrap 5 Template">
+	<meta property="og:description" content="Fillow : Fillow Saas Admin  Bootstrap 5 Template">
+	<meta property="og:image" content="https://fillow.dexignlab.com/xhtml/social-image.png">
+	<meta name="format-detection" content="telephone=no">
+	
+	<!-- PAGE TITLE HERE -->
+	<title>Admin Dashboard</title>
+	
+	<!-- FAVICONS ICON -->
+	<link rel="shortcut icon" type="image/png" href="images/favicon.png">
+	<link href="{% static 'vendor/jquery-nice-select/css/nice-select.css'%}" rel="stylesheet">
+	<link href="{% static 'vendor/lightgallery/css/lightgallery.min.css'%}" rel="stylesheet">
+    <link href="{% static 'css/profile.css'%}" rel="stylesheet">
+
+</head>
+
+<body>
+    {% block content %}
+
+    {% endblock %}
+
+
+<!--**********************************
+        Main wrapper end
+    ***********************************-->
+	
+	<!--removeIf(production)-->
+        
+    <!--**********************************
+        Scripts
+    ***********************************-->
+    <!-- Required vendors -->
+    <script src="{% static 'vendor/global/global.min.js'%}"></script>
+	<script src="{% static 'vendor/bootstrap-select/dist/js/bootstrap-select.min.js'%}"></script>
+	<script src="{% static 'vendor/jquery-nice-select/js/jquery.nice-select.min.js'%}"></script>
+    <script src="{% static 'vendor/chart.js/Chart.bundle.min.js'%}"></script>
+	<script src="{% static 'vendor/lightgallery/js/lightgallery-all.min.js'%}"></script>
+    <script src="{% static 'js/custom.min.js'%}"></script>
+	<script src="{% static 'js/dlabnav-init.js'%}"></script>
+	<script src="{% static 'js/demo.js'%}"></script>
+    <script src="{% static 'js/styleSwitcher.js'%}"></script>
+	
+	
+</body>
+</html>    

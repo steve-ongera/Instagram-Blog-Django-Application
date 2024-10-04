@@ -38,4 +38,8 @@ urlpatterns = [
     path('create_profile/<int:user_id>/', views.create_profile, name='create_profile'),
     path('update_profile/', views.update_profile_view, name='update_profile'),
     path('', views.test , name="test"),
+
+    path('reels/upload/', views.upload_reel, name='upload_reel'),
+    path('reels/', views.reel_list, name='reel_list'),
+    path('reels/view/<int:reel_id>/', views.view_reel, name='view_reel'),  # New URL for viewing a reel
 ]

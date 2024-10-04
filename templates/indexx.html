@@ -200,7 +200,8 @@
               />
             </svg>
           </a>
-          <a href="#">
+   
+          <a href="{% url 'reel_list'%}">
             <svg
               width="24"
               height="24"
@@ -566,18 +567,30 @@
               <button>See All</button>
             </div>
             <div class="side-menu__suggestions-content">
+             
               {% for suggestion in suggestions %}
-              <div class="side-menu__suggestion">
-                <a href="#" class="side-menu__suggestion-avatar">
-                  <img src="{% if suggestion.profile_pic %}{{ suggestion.profile_pic.url }}{% else %}{% static 'assets/default-user.png' %}{% endif %}" alt="{{ suggestion.user.username }}'s profile picture">
-
-                </a>
-                <div class="side-menu__suggestion-info">
-                  <a href="#">{{ suggestion.user.username }}</a>
-                  <span>Followed by user1, user2 and 9 others</span>
+                <div class="side-menu__suggestion">
+                    <a href="{% url 'profile' suggestion.profile.user.username %}" class="side-menu__suggestion-avatar">
+                      <img src="{% if suggestion.profile.profile_pic %}{{ suggestion.profile.profile_pic.url }}{% else %}{% static 'assets/default-user.png' %}{% endif %}" alt="{{ suggestion.profile.user.username }}'s profile picture">
+                    </a>
+                    <div class="side-menu__suggestion-info">
+                        <a href="{% url 'profile' suggestion.profile.user.username %}">{{ suggestion.profile.user.username }}</a>
+                            {% if suggestion.followers %}
+                                <span>Followed by 
+                                    {% for follower in suggestion.followers %}
+                                        {{ follower.username }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                    {% if suggestion.profile.followers.count > 2 %}and others{% endif %}
+                                </span>
+                            {% else %}
+                                <span>No followers yet</span>
+                            {% endif %}
+                    </div>
+                    <form method="POST" action="{% url 'follow_user' suggestion.profile.user.username %}">
+                        {% csrf_token %}
+                        <button type="submit" class="side-menu__suggestion-button">Follow</button>
+                    </form>
                 </div>
-                <button class="side-menu__suggestion-button">Follow</button>
-              </div>
               {% endfor %}
               
               
@@ -624,7 +637,7 @@
             </div>
 
             <span class="side-menu__footer-copyright"
-              >&copy; 2021 instagram from facebook</span
+              >&copy; 2024 instagram clone from InnovationHub</span
             >
           </div>
         </section>
@@ -666,7 +679,7 @@
           />
         </svg>
       </a>
-      <a href="#" class="navbar__button">
+      <a href="{% url 'reel_list'%}" class="navbar__button">
         <svg
           width="24"
           height="24"

@@ -58,3 +58,8 @@ class MessageForm(forms.ModelForm):
         widgets = {
             'content': forms.Textarea(attrs={'placeholder': 'Type your message'}),
         }
+
+class ReelForm(forms.ModelForm):
+    class Meta:
+        model = Reel
+        fields = ['video', 'caption']

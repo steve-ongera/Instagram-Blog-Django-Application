@@ -63,4 +63,17 @@ class Story(models.Model):
 
     def __str__(self):
         return f'{self.user.username} Story'
+    
+
+
+class Reel(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reels')
+    video = models.FileField(upload_to='reels/')  # To store video files
+    caption = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.ManyToManyField(User, related_name='liked_reels', blank=True)
+    views = models.PositiveIntegerField(default=0)  # Field to track views
+
+    def __str__(self):
+        return f'Reel by {self.user.username}'
 

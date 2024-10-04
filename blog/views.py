@@ -222,29 +222,41 @@ def toggle_like(request, id):
     
 @login_required
 def test(request):
-     # Get all posts, ordered by latest
+    # Get all posts, ordered by latest
     posts = Post.objects.all().order_by('-created_at')
     
     # Get stories created within the last 24 hours
     stories = Story.objects.filter(created_at__gte=timezone.now() - timedelta(hours=24))
 
-     # Get the logged-in user's information
+    # Get the logged-in user's information
     logged_in_user = request.user
+    
+    # Get the list of users the logged-in user is following
+    following = logged_in_user.profile.following.all()
 
-    # Simulate "Suggestions for You" (e.g., users not followed by the logged-in user)
-    suggestions = User.objects.exclude(id=logged_in_user.id)[:9]  # Exclude the logged-in user and limit to 5 suggestions
+    # Get suggestions (users not followed by the logged-in user)
+    suggestions = User.objects.exclude(id__in=following).exclude(id=logged_in_user.id)[:9]
     
     # Get profiles of the suggested users
     suggested_profiles = Profile.objects.filter(user__in=suggestions)
+
+    # Prepare the suggestions with the first two followers
+    suggestion_data = []
+    for profile in suggested_profiles:
+        followers = profile.followers.all()[:2]  # Get the first two followers
+        suggestion_data.append({
+            'profile': profile,
+            'followers': followers
+        })
 
     # Pass both posts and stories to the context
     context = {
         'posts': posts,
         'stories': stories,
         'logged_in_user': logged_in_user,
-        'suggestions': suggested_profiles,
+        'suggestions': suggestion_data,
     }
-    return render(request , 'indexx.html' , context)
+    return render(request, 'indexx.html', context)
 
 # Example view to follow a user
 # View to follow a user
@@ -360,3 +372,39 @@ def followers_list(request, username):
         'profile_user': user,
         'followers': followers,
     })
+
+
+@login_required
+def upload_reel(request):
+    if request.method == 'POST':
+        form = ReelForm(request.POST, request.FILES)
+        if form.is_valid():
+            reel = form.save(commit=False)
+            reel.user = request.user
+            reel.save()
+            return redirect('reel_list')  # Redirect to the reel list page
+    else:
+        form = ReelForm()
+    return render(request, 'upload_reel.html', {'form': form})
+
+@login_required
+def reel_list(request):
+    reels = Reel.objects.all().order_by('-created_at')
+    return render(request, 'reel_list.html', {'reels': reels})
+
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt  # Temporarily disable CSRF protection for the view increment
+def view_reel(request, reel_id):
+    reel = get_object_or_404(Reel, id=reel_id)
+
+    # Only increment views if the request is a POST
+    if request.method == 'POST':
+        reel.views += 1
+        reel.save()
+        return JsonResponse({'status': 'success'})
+
+    context = {
+        'reel': reel,
+    }
+    return render(request, 'view_reel.html', context)
